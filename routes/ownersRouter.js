@@ -1,8 +1,24 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
+const ownerModel = require("../models/owner-model.js");
 
-router.get('/test', (req, res)=>{
-    res.send('Owners Route Working')
-})
+if ((process.env.NODE_ENV = "development")) {
+  router.post("/create", async (req, res) => {
+    let owner = await ownerModel.find();
+    if (owner.length > 0) {
+      return res.status(500).send("Only one Onwer Allowed");
+    } 
 
-module.exports = router
+    const {fullname, email, password} = req.body
+
+    const createdOwner = await ownerModel.create({
+        fullname,
+        email,
+        password
+    })
+
+    res.send(createdOwner)
+  });
+}
+
+module.exports = router;

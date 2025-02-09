@@ -4,6 +4,9 @@ const path = require("path");
 const usersRouter = require("./routes/userRouter.js");
 const productsRouter = require("./routes/productsRouter.js");
 const ownersRouter = require("./routes/ownersRouter.js");
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const connectDB = require("./config/db.js");
 const { log } = require("console");
