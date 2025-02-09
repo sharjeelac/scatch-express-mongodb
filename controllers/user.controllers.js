@@ -7,6 +7,9 @@ const generateToken = require('../utils/generateToken.js')
 module.exports.userRegister = async (req, res) => {
     try {
       const { fullname, email, password } = req.body;
+
+      const checkUser = await userModel.findOne({email : email})
+      if(checkUser) return res.status(401).send('Email have already an account')
   
       const salt = await bcrypt.genSalt(10)
       const hash = await bcrypt.hash(password, salt)
