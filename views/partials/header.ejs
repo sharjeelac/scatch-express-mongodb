@@ -1,28 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
-      rel="stylesheet"
-    />
+    <title>Scatch</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
-  </head>
+    <style>
+        @keyframes slide-down {
+            0% { opacity: 0; transform: translateY(-10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
 
-  <body class="font-['helvetica_now_display']">
-    <nav class="w-full flex justify-between px-5 py-3">
-      <h3 class="text-xl">Scatch</h3>
-      <% var loggedin = typeof loggedin !== 'undefined' ? loggedin : true %>
-       <% if(loggedin) { %>
-      <div class="flex gap-5">
-        <a href="">Shop</a>
-        <a href="/cart">Cart</a>
-        <a href="">My Account</a>
-        <a class="text-red-600" href="/users/logout">Logout</a>
-      </div>
-      <% } %>
+<body class="font-['helvetica_now_display']">
+    <nav class="w-full pb-50 bg-white border-b border-gray-100 px-4 sm:px-6 lg:px-8 fixed top-0 z-50 sticky">
+        <div class="max-w-7xl mx-auto flex justify-between items-center h-16">
+            <!-- Logo -->
+            <a href="/" class="flex items-center space-x-2">
+                <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    ⌘ Scatch
+                </span>
+            </a>
+
+            <% var loggedin = typeof loggedin !== 'undefined' ? loggedin : true %>
+            <% if(loggedin) { %>
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <div class="flex space-x-4">
+                        <a href="/shop" class="flex items-center px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors group">
+                            <i class="ri-store-2-line mr-2"></i>
+                            Shop
+                            <span class="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-blue-600 mt-1"></span>
+                        </a>
+                        <a href="/cart" class="flex items-center px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors group">
+                            <i class="ri-shopping-cart-2-line mr-2"></i>
+                            Cart
+                            <span class="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-blue-600 mt-1"></span>
+                        </a>
+                        <a href="/account" class="flex items-center px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors group">
+                            <i class="ri-user-3-line mr-2"></i>
+                            Account
+                            <span class="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-blue-600 mt-1"></span>
+                        </a>
+                    </div>
+                    <a href="/users/logout" class="ml-4 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors flex items-center">
+                        <i class="ri-logout-box-r-line mr-2"></i>
+                        Logout
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                    <i class="ri-menu-line text-2xl"></i>
+                </button>
+            <% } %>
+        </div>
     </nav>
-  </body>
+
+    <!-- Mobile Menu -->
+    <% if(loggedin) { %>
+    <div class="md:hidden fixed w-full bg-white shadow-lg z-40 mt-16 hidden" id="mobile-menu">
+        <div class="px-4 pt-2 pb-4 space-y-2">
+            <a href="/shop" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                <i class="ri-store-2-line mr-3"></i>
+                Shop
+            </a>
+            <a href="/cart" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                <i class="ri-shopping-cart-2-line mr-3"></i>
+                Cart
+            </a>
+            <a href="/account" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                <i class="ri-user-3-line mr-3"></i>
+                Account
+            </a>
+            <a href="/users/logout" class="flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg">
+                <i class="ri-logout-box-r-line mr-3"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+    <% } %>
+
+    <script>
+        document.querySelector('button[class*="md:hidden"]').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('animate-slide-down');
+        });
+    </script>
+</body>
 </html>

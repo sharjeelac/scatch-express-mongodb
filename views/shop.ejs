@@ -1,63 +1,109 @@
-<%- include('./partials/header') %> <% if(success.length>0){ %>
-<div
-  class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500"
->
-  <span class="inline-block mt-1 mb-1 text-white"> <%= success %> </span>
+<%- include('./partials/header') %>
+
+<% if(success.length>0){ %>
+<div class="fixed top-5 left-1/2 -translate-x-1/2 z-50 animate-slide-down">
+    <div class="flex items-center bg-emerald-500 text-white px-4 py-2 rounded-lg shadow-lg">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        <%= success %>
+    </div>
 </div>
 <% } %>
 
-<div class="w-full h-screen flex items-start px-20 py-20">
-  <div class="w-[25%] flex h-screen flex-col items-start">
-    <div class="flex items-center gap-2">
-      <h3>sort by</h3>
-      <form action="/shop">
-        <select class="border-[1px] px-2 py-1" name="sortby" id="">
-          <option value="popular">Popular</option>
-          <option value="newest">Newest</option>
-        </select>
-      </form>
-    </div>
-    <div class="flex flex-col mt-20">
-      <a class="block w-fit mb-2" href="">New Collection</a>
-      <a class="block w-fit mb-2" href="">All Products</a>
-      <a class="block w-fit mb-2" href="">Discounted Products</a>
-    </div>
-    <div class="mt-32">
-      <a class="block w-fit mb-2" href="">Filter by :</a>
-      <a class="block w-fit mb-2" href="">Availability</a>
-      <a class="block w-fit mb-2" href="">Discount</a>
-    </div>
-  </div>
-  <div class="w-[75%] flex flex-col gap-5 flex-wrap h-screen">
-    <div class="flex items-start gap-5">
-      <% products.forEach(function(product){ %>
-      <div class="w-60">
-        <div
-          class="w-full h-52 flex items-center justify-center bg-[<%= product.bgcolor %>]"
-        >
-          <img
-            class="h-[12rem]"
-            src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
-            alt=""
-          />
+<div class="min-h-screen bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar Filters -->
+            <aside class="lg:w-64 flex-shrink-0">
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 sticky top-8">
+                    <!-- Sorting -->
+                    <div class="mb-8">
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">Sort By</h3>
+                        <form action="/shop">
+                            <select name="sortby" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="popular">Popular</option>
+                                <option value="newest">Newest</option>
+                            </select>
+                        </form>
+                    </div>
+
+                    <!-- Collections -->
+                    <div class="mb-8">
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">Collections</h3>
+                        <nav class="space-y-2">
+                            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition-colors">
+                                <span class="mr-2">🆕</span>
+                                New Collection
+                            </a>
+                            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition-colors">
+                                <span class="mr-2">📦</span>
+                                All Products
+                            </a>
+                            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition-colors">
+                                <span class="mr-2">🎁</span>
+                                Discounted
+                            </a>
+                        </nav>
+                    </div>
+
+                    <!-- Filters -->
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">Filters</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="availability" class="rounded text-blue-600 focus:ring-blue-500">
+                                <label for="availability" class="ml-2 text-gray-700">In Stock</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="discount" class="rounded text-blue-600 focus:ring-blue-500">
+                                <label for="discount" class="ml-2 text-gray-700">On Sale</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Product Grid -->
+            <main class="flex-1">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+                    <% products.forEach(function(product){ %>
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                        <!-- Product Image -->
+                        <div class="aspect-square bg-gray-100 flex items-center justify-center" style="background-color: <%= product.bgcolor %>">
+                            <img 
+                                src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" 
+                                alt="<%= product.name %>"
+                                class="w-3/4 h-3/4 object-contain"
+                            >
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="p-4" style="background-color: <%= product.panelcolor %>; color: <%= product.textcolor %>">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-semibold text-lg"><%= product.name %></h3>
+                                    <div class="mt-1">
+                                        <% if(product.discount > 0) { %>
+                                        <span class="text-sm line-through opacity-75">₹<%= product.price %></span>
+                                        <% } %>
+                                        <span class="text-xl font-bold">₹<%= product.price - product.discount %></span>
+                                    </div>
+                                </div>
+                                <a href="/addtocart/<%= product._id %>" 
+                                   class="p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow">
+                                    <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+            </main>
         </div>
-        <div
-          class="flex justify-between bg-[<%= product.panelcolor %>] items-center px-4 py-4 text-[<%= product.textcolor %>]"
-        >
-          <div>
-            <h3><%= product.name %></h3>
-            <h4>₹ <%= product.price %></h4>
-          </div>
-          <a
-            class="w-7 h-7 flex items-center justify-center rounded-full bg-white"
-            href="/addtocart/<%= product._id %>"
-          >
-            <i class="ri-add-line"></i>
-          </a>
-        </div>
-      </div>
-      <% }) %>
     </div>
-  </div>
 </div>
+
 <%- include('./partials/footer') %>
