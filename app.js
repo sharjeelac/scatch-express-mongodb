@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.get('/', (req, res)=>{
   let error = req.flash('error')
-  res.render('index', {error})
+  res.render('index', {error, loggedin: false})
 })
 
 app.use("/index", indexRouter);

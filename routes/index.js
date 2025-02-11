@@ -5,7 +5,7 @@ const productModel = require('../models/product-Model.js')
 
 router.get('/', (req, res)=>{
     let error = req.flash('error')
-    res.render('index', {error})
+    res.render('index', {error, loggedin: false})
 })
 
 router.get('/shop', isLoggedIn ,async (req, res)=>{
