@@ -2,6 +2,7 @@ const userModel = require("../models/user-Model.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const generateToken = require("../utils/generateToken.js");
+const productModel = require("../models/product-Model.js");
 
 module.exports.userRegister = async (req, res) => {
   try {
@@ -48,10 +49,11 @@ module.exports.userLogin = async (req, res) => {
   const token = generateToken(checkuser);
   res.cookie("token", token);
 
-  res.render("shop");
+  const products = await productModel.find();
+  res.render("shop", { products });
 };
 
 module.exports.logout = async (req, res) => {
-  res.clearCookie('token');
+  res.clearCookie("token");
   res.redirect("/");
 };
