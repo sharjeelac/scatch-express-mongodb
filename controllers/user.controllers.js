@@ -24,8 +24,9 @@ module.exports.userRegister = async (req, res) => {
     });
 
     const token = generateToken(newUser);
+    res.cookie("token", token);
 
-    res.render("shop");
+    res.redirect('/shop')
   } catch (error) {
     res.send(error.message);
   }
@@ -49,8 +50,7 @@ module.exports.userLogin = async (req, res) => {
   const token = generateToken(checkuser);
   res.cookie("token", token);
 
-  const products = await productModel.find();
-  res.render("shop", { products });
+  res.redirect('/shop')
 };
 
 module.exports.logout = async (req, res) => {

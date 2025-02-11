@@ -14,8 +14,8 @@ router.get("/test", (req, res) => {
 
 router.get("/shop", isLoggedIn, async (req, res) => {
   const products = await productModel.find();
-  console.log(products)
-  res.render("shop", { products });
+  const success = req.flash("success");
+  res.render("shop", { products, success });
 });
 
 router.post("/register", userRegister);
