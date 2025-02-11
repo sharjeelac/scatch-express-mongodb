@@ -23,7 +23,31 @@ router.get("/addtocart/:id", isLoggedIn, async (req, res) => {
   res.redirect("/users/shop");
 });
 
-router.get("/cart", isLoggedIn, (req, res) => {
-  res.render("cart");
+router.get("/cart", isLoggedIn, async (req, res) => {
+  const user = await userModel
+    .findOne({ email: req.user.email })
+    .populate("cart");
+
+  console.log("User Cart:", user.cart); // Check karne ke liye
+  console.log(
+    "Discount Values:",
+    user.cart.map((item) => item.discount)
+  ); // Yeh check karega ki discount exist karta hai ya nahi
+
+  const bill = user.cart.reduce((total, item) => {
+    return total + (Number(item.price) - Number(item.discount) + 20);
+  }, 0);
+
+  let totalDiscount = user.cart.reduce(
+    (acc, item) => acc + (item.discount || 0),
+    0
+  ); // Ensure discount is not undefined
+
+  res.render("cart", {
+    user: user,
+    bill: bill,
+    discount: totalDiscount,
+  });
 });
+
 module.exports = router;
