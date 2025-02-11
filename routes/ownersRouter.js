@@ -21,4 +21,8 @@ if ((process.env.NODE_ENV = "development")) {
   });
 }
 
+
+router.get('/adminpanel', (req , res)=>{
+  res.render('createproducts')
+})
 module.exports = router;

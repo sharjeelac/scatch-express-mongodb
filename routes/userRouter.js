@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { userRegister, userLogin } = require("../controllers/user.controllers.js");
+const { userRegister, userLogin, logout } = require("../controllers/user.controllers.js");
 
 router.get("/test", (req, res) => {
   res.send("User Route Working");
@@ -8,5 +8,6 @@ router.get("/test", (req, res) => {
 
 router.post("/register", userRegister);
 router.post('/login', userLogin)
+router.get('/logout', logout)
 
 module.exports = router;

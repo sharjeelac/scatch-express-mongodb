@@ -8,7 +8,10 @@ module.exports.userRegister = async (req, res) => {
     const { fullname, email, password } = req.body;
 
     const checkUser = await userModel.findOne({ email: email });
-    if (checkUser) return res.status(401).send("Email have already an account");
+    if (checkUser) {
+      req.flash("error", "email already register");
+      return res.redirect("/");
+    }
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
@@ -21,7 +24,7 @@ module.exports.userRegister = async (req, res) => {
 
     const token = generateToken(newUser);
 
-    res.send("User Created");
+    res.render("shop");
   } catch (error) {
     res.send(error.message);
   }
@@ -31,13 +34,24 @@ module.exports.userLogin = async (req, res) => {
   const { fullname, email, password } = req.body;
   const checkuser = await userModel.findOne({ email: email });
 
-  if (!checkuser) return res.send("email or password is incorrect");
+  if (!checkuser) {
+    req.flash("error", "invalid Credential");
+    return res.redirect("/");
+  }
 
   const checkPassword = await bcrypt.compare(password, checkuser.password);
-  if (!checkPassword) return res.send("email or password is incorrect");
+  if (!checkPassword) {
+    req.flash("error", "invalid Credential");
+    return res.redirect("/");
+  }
 
-  const token = generateToken(checkuser)
-  res.cookie('token', token)
+  const token = generateToken(checkuser);
+  res.cookie("token", token);
 
-  res.send("You are loggind");
+  res.render("shop");
+};
+
+module.exports.logout = async (req, res) => {
+  res.clearCookie('token');
+  res.redirect("/");
 };
